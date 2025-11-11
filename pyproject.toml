@@ -1,0 +1,23 @@
+[project]
+name = "spectrospatial-component-separation"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "astropy>=7.1.1",
+    "dill>=0.4.0",
+    "ipykernel>=7.1.0",
+    "jax>=0.7.2",
+    "jax-finufft",
+    "lvm-tools>=0.0.8",
+    "matplotlib>=3.10.7",
+    "mpl-drip>=1.0.5",
+    "numpy>=2.3.4",
+    "optax>=0.2.6",
+    "scipy>=1.16.3",
+    "spectracles>=0.5.4",
+]
+
+[tool.uv.sources]
+jax-finufft = { git = "https://github.com/flatironinstitute/jax-finufft.git" }
