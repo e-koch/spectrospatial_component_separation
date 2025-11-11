@@ -1,0 +1,2 @@
+# spectrospatial_component_separation
+Gaussian spectral decomposition with spatial coherence
