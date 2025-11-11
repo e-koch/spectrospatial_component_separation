@@ -3,7 +3,7 @@ from pathlib import Path
 import jax
 import jax.numpy as jnp
 import matplotlib.pyplot as plt
-import mpl_drip
+import mpl_drip  # noqa: F401
 import numpy as np
 from model import TwoLineMixture, all_phases, neg_ln_posterior
 from numpy import pi as π
