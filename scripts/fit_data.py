@@ -389,3 +389,54 @@ axes[1].set_ylabel("Pixel Y")
 if SAVE:
     plt.savefig(PLOTS_DIR / "spectrally_collapsed_residuals.pdf", **SAVEFIG_KWARGS)
 plt.show()
+
+
+# Another channels plot but with all the columns data, model, components, residuals
+fig, axes = plt.subplots(10, 5, figsize=(15, 18), layout="compressed", dpi=100)
+for i, channel_idx in enumerate(channel_indices):
+    vel = vels[channel_idx]
+    data_channel = data[channel_idx, :, :].reshape(ny, nx) * peak_intensity
+    pred_channel = pred_spectra[channel_idx, :].reshape(ny, nx) * peak_intensity
+    comp1_channel = component_1[channel_idx, :].reshape(ny, nx) * peak_intensity
+    comp2_channel = component_2[channel_idx, :].reshape(ny, nx) * peak_intensity
+    residuals_channel = (
+        data[channel_idx, :, :].reshape(ny, nx) - pred_spectra[channel_idx, :].reshape(ny, nx)
+    ) * peak_intensity
+
+    im0 = axes[i, 0].imshow(data_channel, origin="lower", cmap="viridis", vmin=0, vmax=A_max)
+    im1 = axes[i, 1].imshow(pred_channel, origin="lower", cmap="viridis", vmin=0, vmax=A_max)
+    im2 = axes[i, 2].imshow(comp1_channel, origin="lower", cmap="viridis", vmin=0, vmax=A_max)
+    im3 = axes[i, 3].imshow(comp2_channel, origin="lower", cmap="viridis", vmin=0, vmax=A_max)
+    im4 = axes[i, 4].imshow(
+        residuals_channel, origin="lower", cmap="red_white_blue_r", vmin=-A_max / 5, vmax=A_max / 5
+    )
+
+    for j in range(5):
+        axes[i, j].set_xticks([])
+        axes[i, j].set_yticks([])
+
+    axes[i, 0].text(
+        0.05 * nx,
+        0.95 * nx,
+        f"{vel:.1f} km/s",
+        color="white",
+        fontsize=12,
+        va="top",
+        ha="left",
+        bbox=dict(facecolor="black", alpha=0.1, pad=2, edgecolor=None, linewidth=0),
+    )
+# Add colorbars at the top
+cbar0 = fig.colorbar(
+    im0, ax=axes[:, 0:4], location="bottom", label="Intensity [K]", aspect=20, pad=0.01
+)
+cbar1 = fig.colorbar(
+    im4, ax=axes[:, 4], location="bottom", label="Residuals [K]", aspect=10, pad=0.01
+)
+axes[0, 0].set_title("Data")
+axes[0, 1].set_title("Model")
+axes[0, 2].set_title("Component 1")
+axes[0, 3].set_title("Component 2")
+axes[0, 4].set_title("Residuals")
+if SAVE:
+    plt.savefig(PLOTS_DIR / "channel_maps_full.pdf", **SAVEFIG_KWARGS)
+plt.show()
