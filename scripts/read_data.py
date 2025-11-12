@@ -87,3 +87,43 @@ plt.xlabel("Velocity [m/s]")
 plt.ylabel("RMS [K]")
 plt.title("RMS as a Function of Velocity")
 plt.show()
+
+
+print(data.shape)  # (velocity, y, x)
+
+i_x_lower = 500
+i_x_upper = 600
+i_y_lower = 500
+i_y_upper = 600
+
+# i_x_centre = data.shape[2] // 2
+# i_y_centre = data.shape[1] // 2
+
+# x_ext = 280
+# y_ext = 280
+
+# i_x_lower = i_x_centre - x_ext // 2
+# i_x_upper = i_x_centre + x_ext // 2
+# i_y_lower = i_y_centre - y_ext // 2
+# i_y_upper = i_y_centre + y_ext // 2
+
+trunc_data = data[:, i_y_lower:i_y_upper, i_x_lower:i_x_upper]
+trunc_rms = rms[i_y_lower:i_y_upper, i_x_lower:i_x_upper]
+
+# Peak intensity plot of truncated data
+plt.figure(figsize=(8, 5))
+plt.imshow(np.nanmax(trunc_data, axis=0), origin="lower")
+plt.colorbar(label="[K]")
+plt.xlabel("Pixel X")
+plt.ylabel("Pixel Y")
+plt.title("Peak Intensity Map (Truncated Data)")
+plt.show()
+
+
+# Save the data and velocities to npz
+np.savez(
+    DATA_DIR / "ic1613_hi21cm_truncated_data.npz",
+    intensities=trunc_data,
+    velocities=vels,
+    rms=trunc_rms,
+)
